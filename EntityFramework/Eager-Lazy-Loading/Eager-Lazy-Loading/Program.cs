@@ -10,15 +10,10 @@ namespace Eager_Lazy_Loading
         {
             using (Eager_Lazy_LoadingEntities db = new Eager_Lazy_LoadingEntities())
             {
-                List<tblDepartment> depList = db.tblDepartments.ToList();
+                // Disabling lazy loading
+                db.Configuration.LazyLoadingEnabled = false;
 
-                foreach (var dep in depList)
-                {
-                    foreach (var emp in dep.tblEmployees)
-                    {
-                        Console.WriteLine(emp.Name);
-                    }
-                }
+                List<tblDepartment> depList = db.tblDepartments.ToList();
             }
         }
     }
