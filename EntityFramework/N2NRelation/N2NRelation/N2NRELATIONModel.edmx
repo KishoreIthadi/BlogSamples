@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="N2NRELATIONModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblAuthorBook">
+          <Key>
+            <PropertyRef Name="BookID" />
+            <PropertyRef Name="AuthorID" />
+          </Key>
+          <Property Name="BookID" Type="int" Nullable="false" />
+          <Property Name="AuthorID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblAuthors">
+          <Key>
+            <PropertyRef Name="AuthorID" />
+          </Key>
+          <Property Name="AuthorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblBooks">
+          <Key>
+            <PropertyRef Name="BookID" />
+          </Key>
+          <Property Name="BookID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tblAuthorBook_tblAuthors">
+          <End Role="tblAuthors" Type="Self.tblAuthors" Multiplicity="1" />
+          <End Role="tblAuthorBook" Type="Self.tblAuthorBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblAuthors">
+              <PropertyRef Name="AuthorID" />
+            </Principal>
+            <Dependent Role="tblAuthorBook">
+              <PropertyRef Name="AuthorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblAuthorBook_tblBooks">
+          <End Role="tblBooks" Type="Self.tblBooks" Multiplicity="1" />
+          <End Role="tblAuthorBook" Type="Self.tblAuthorBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblBooks">
+              <PropertyRef Name="BookID" />
+            </Principal>
+            <Dependent Role="tblAuthorBook">
+              <PropertyRef Name="BookID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="N2NRELATIONModelStoreContainer">
+          <EntitySet Name="tblAuthorBook" EntityType="Self.tblAuthorBook" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblAuthors" EntityType="Self.tblAuthors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblBooks" EntityType="Self.tblBooks" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblAuthorBook_tblAuthors" Association="Self.FK_tblAuthorBook_tblAuthors">
+            <End Role="tblAuthors" EntitySet="tblAuthors" />
+            <End Role="tblAuthorBook" EntitySet="tblAuthorBook" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblAuthorBook_tblBooks" Association="Self.FK_tblAuthorBook_tblBooks">
+            <End Role="tblBooks" EntitySet="tblBooks" />
+            <End Role="tblAuthorBook" EntitySet="tblAuthorBook" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="N2NRELATIONModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblAuthor">
+          <Key>
+            <PropertyRef Name="AuthorID" />
+          </Key>
+          <Property Name="AuthorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tblBooks" Relationship="Self.tblAuthorBook" FromRole="tblAuthors" ToRole="tblBooks" />
+        </EntityType>
+        <EntityType Name="tblBook">
+          <Key>
+            <PropertyRef Name="BookID" />
+          </Key>
+          <Property Name="BookID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tblAuthors" Relationship="Self.tblAuthorBook" FromRole="tblBooks" ToRole="tblAuthors" />
+        </EntityType>
+        <Association Name="tblAuthorBook">
+          <End Role="tblAuthors" Type="Self.tblAuthor" Multiplicity="*" />
+          <End Role="tblBooks" Type="Self.tblBook" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="N2NRELATIONEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblAuthors" EntityType="Self.tblAuthor" />
+          <EntitySet Name="tblBooks" EntityType="Self.tblBook" />
+          <AssociationSet Name="tblAuthorBook" Association="Self.tblAuthorBook">
+            <End Role="tblAuthors" EntitySet="tblAuthors" />
+            <End Role="tblBooks" EntitySet="tblBooks" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="N2NRELATIONModelStoreContainer" CdmEntityContainer="N2NRELATIONEntities">
+          <EntitySetMapping Name="tblAuthors">
+            <EntityTypeMapping TypeName="N2NRELATIONModel.tblAuthor">
+              <MappingFragment StoreEntitySet="tblAuthors">
+                <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblBooks">
+            <EntityTypeMapping TypeName="N2NRELATIONModel.tblBook">
+              <MappingFragment StoreEntitySet="tblBooks">
+                <ScalarProperty Name="BookID" ColumnName="BookID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="tblAuthorBook" TypeName="N2NRELATIONModel.tblAuthorBook" StoreEntitySet="tblAuthorBook">
+            <EndProperty Name="tblAuthors">
+              <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+            </EndProperty>
+            <EndProperty Name="tblBooks">
+              <ScalarProperty Name="BookID" ColumnName="BookID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
