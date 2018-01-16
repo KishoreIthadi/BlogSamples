@@ -1,2 +1,1 @@
-# Blog-Samples
-Blog-Samples
+# Sample for the blog http://blog.ithadi.com 
